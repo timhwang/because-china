@@ -338,7 +338,7 @@
     const isLocal = ['localhost', '127.0.0.1'].includes(window.location.hostname);
     const API_URL = isLocal
       ? '/api/generate'
-      : '/api/generate'; // Update for production deployment
+      : 'https://because-china.vercel.app/api/generate';
 
     const userInput = document.getElementById('userInput');
     const generateBtn = document.getElementById('generateBtn');
