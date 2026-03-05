@@ -546,7 +546,21 @@
 
     // Split into sentences, respecting abbreviations like U.S., Dr., etc.
     function breakIntoChunks(text, sentencesPerChunk) {
-      const sentences = text.match(/[^.!?]*(?:[A-Z]\.)+[^.!?]*[.!?]+|[^.!?]+[.!?]+/g) || [text];
+      // Protect common abbreviations by replacing their periods with a placeholder
+      const PLACEHOLDER = '\u0000';
+      let safe = text;
+      // Protect title/honorific abbreviations (Dr., Mr., Mrs., Gen., Rep., Sen., Col., Prof., etc.)
+      safe = safe.replace(/\b(Dr|Mr|Mrs|Ms|Jr|Sr|Prof|Gen|Rep|Sen|Gov|Col|Sgt|Rev|Hon|Lt|Maj|Capt|St|Adm|Cmdr|vs|etc|approx|dept|est|govt|natl|intl)\./gi,
+        (m, abbr) => abbr + PLACEHOLDER);
+      // Protect single-letter abbreviations like U.S., U.N., D.C.
+      safe = safe.replace(/\b([A-Z])\./g, '$1' + PLACEHOLDER);
+
+      // Split on actual sentence-ending punctuation
+      const parts = safe.match(/[^.!?]+[.!?]+/g) || [safe];
+
+      // Restore placeholders back to periods
+      const sentences = parts.map(s => s.replace(/\u0000/g, '.'));
+
       const chunks = [];
       for (let i = 0; i < sentences.length; i += sentencesPerChunk) {
         chunks.push(sentences.slice(i, i + sentencesPerChunk).join('').trim());
