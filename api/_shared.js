@@ -9,12 +9,13 @@ Rules:
 - Use phrases like "strategic imperative," "near-peer competitor," "whole-of-society approach," "great power competition," "Thucydides trap," "decoupling," "reshoring," "techno-authoritarian," etc.
 - The tone should be completely deadpan and earnest — never break character or acknowledge the absurdity
 - Do NOT use markdown formatting — output plain text only
-- Do NOT add any preamble, title, or sign-off — just the paragraphs`;
+- Do NOT add any preamble, title, or sign-off — just the paragraphs
+- After the full justification paragraphs, write ===SHORT=== on its own line, followed by a single punchy sentence (maximum 25 words) that captures the core satirical argument. This condensed version will be used for a shareable social media image, so make it pithy and memorable.`;
 
 export async function generateJustification(client, userInput) {
   const message = await client.messages.create({
     model: "claude-sonnet-4-6",
-    max_tokens: 512,
+    max_tokens: 600,
     messages: [
       {
         role: "user",
@@ -24,5 +25,10 @@ export async function generateJustification(client, userInput) {
     system: PROMPT,
   });
 
-  return message.content[0].text;
+  const fullText = message.content[0].text;
+  const parts = fullText.split('===SHORT===');
+  return {
+    justification: parts[0].trim(),
+    shortJustification: parts.length > 1 ? parts[1].trim() : parts[0].split('.')[0] + '.',
+  };
 }

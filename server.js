@@ -20,6 +20,8 @@ const __dirname = dirname(__filename);
 const app = express();
 app.use(express.json());
 
+app.use(express.static(__dirname));
+
 app.get("/", (req, res) => {
   res.sendFile(join(__dirname, "index.html"));
 });
@@ -32,8 +34,8 @@ app.post("/api/generate", async (req, res) => {
 
   try {
     const client = new Anthropic();
-    const justification = await generateJustification(client, input);
-    res.json({ justification });
+    const result = await generateJustification(client, input);
+    res.json(result);
   } catch (error) {
     console.error("Claude API error:", error);
     res.status(500).json({ error: "Failed to generate justification. Check your ANTHROPIC_API_KEY." });

@@ -16,8 +16,8 @@ export default async function handler(req, res) {
 
   try {
     const client = new Anthropic();
-    const justification = await generateJustification(client, input);
-    res.json({ justification });
+    const result = await generateJustification(client, input);
+    res.json(result);
   } catch (error) {
     console.error("Claude API error:", error);
     res.status(500).json({ error: "Failed to generate justification." });
