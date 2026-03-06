@@ -591,9 +591,8 @@
       ctx.fillText(premiseLine.trim(), S / 2, premiseLineY);
 
       // === Body text - first paragraph only, larger font ===
-      const footerReserve = 50;
       const bodyStartY = premiseLineY + 80;
-      const bodyEndY = S - pad - footerReserve;
+      const bodyEndY = S - pad;
       const availableH = bodyEndY - bodyStartY;
 
       const bodyText = getFirstParagraph();
@@ -633,15 +632,6 @@
         curY = wrapText(ctx, chunks[c], pad, curY, contentW, bestLineHeight, null, false);
         if (c < chunks.length - 1) curY += paraGap;
       }
-
-      // === Bottom: URL ===
-      ctx.fillStyle = 'rgba(0, 0, 0, 0.1)';
-      ctx.fillRect(pad, S - pad - 30, contentW, 1);
-
-      ctx.font = '600 16px Jost, sans-serif';
-      ctx.fillStyle = '#999999';
-      ctx.textAlign = 'center';
-      drawTextWithSpacing(ctx, 'DEFENSEANALYSES.ORG', S / 2, S - pad, 3);
 
       return canvas;
     }
